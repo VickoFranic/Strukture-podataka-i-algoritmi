@@ -25,9 +25,9 @@ int print(int *niz, int n) {
 }
 
 // selection sort
-// Ti(n) = 1 + n * ( 5 + (n/2)*2 ) 
-// Ti(n) = 1 + n*(5 + n)
-// Ti(n) = 1 + 5n + n^2
+// Ts(n) = 1 + n * ( 5 + (n/2)*2 ) 
+// Ts(n) = 1 + n*(5 + n)
+// Ts(n) = 1 + 5n + n^2
 void selectionsort(int *niz, int n) {
 	int i, j;
 	for (i = 0; i < n - 1; i++) {   // 1 + n
@@ -44,11 +44,13 @@ void selectionsort(int *niz, int n) {
 }
 
 // insertion sort
+// Ti(n) = 2 + n * (1 + (5 * n/2)) 
+// Ti(n) = 2 + n + 5/2 * n^2
 void insertionsort(int *niz, int n) {
-	int i, j;
-	for (i = 1; i < n; i++) {
-		j = i;
-		while (j > 0 && niz[j - 1] > niz[j]) {
+	int i, j; // 2
+	for (i = 1; i < n; i++) { // n
+		j = i; // 1
+		while (j > 0 && niz[j - 1] > niz[j]) { // (n/2) * 5
 			int tmp;
 			tmp = niz[j - 1];
 			niz[j - 1] = niz[j];
@@ -60,7 +62,7 @@ void insertionsort(int *niz, int n) {
 
 // quick sort partition bez odabira pivota
 int partition(int *niz, int n) {
-	int l, r;
+	int l, r, tmp;
 	l = 1;
 	r = n - 1;
 	while (l < r) {
@@ -71,7 +73,7 @@ int partition(int *niz, int n) {
 			l++;
 		}
 		else {
-			int tmp = niz[l];
+			tmp = niz[l];
 			niz[l] = niz[r];
 			niz[r] = tmp;
 		}
@@ -97,14 +99,43 @@ void quicksort(int *niz, int n) {
 	quicksort(niz + pi + 1, n - pi - 1);
 }
 
+void swap(int* niz, int left, int right) {
+	int tmp;
+	tmp = niz[left];
+	niz[left] = niz[right];
+	niz[right] = tmp;
+}
 
+int median(int* niz, int n) {
+	int l, r, mid;
+
+	l = 0;
+	r = n - 1;
+
+	mid = n/2;
+
+	if (niz[r] < niz[l])
+		swap(niz, l, r);
+	if (niz[mid] < niz[l])
+		swap(niz, mid, l);
+	if (niz[r] < niz[mid])
+		swap(niz, r, mid);
+
+	return mid;
+}
 
 
 // quick sort partition s odabirom pivota kao srednje vrijednosti izmedju prvog, srednjeg i zadnjeg elementa
 int partition_new(int *niz, int n) {
 	int l, r;
-	int tmp;
+	int tmp, med;
 
+	med = median(niz, n);
+
+	l = 0;
+	swap(niz, l, med);
+
+	/*
 	if (((niz[n / 2] > niz[0]) && (niz[n / 2] < niz[n - 1])) || ((niz[n - 1] < niz[n / 2]) && (niz[0] > niz[n / 2]))) {
 		tmp = niz[0];
 		niz[0] = niz[n / 2];
@@ -115,6 +146,8 @@ int partition_new(int *niz, int n) {
 		niz[0] = niz[n - 1];
 		niz[n - 1] = tmp;
 	}
+	*/
+
 
 	l = 1;
 	r = n - 1;
@@ -126,7 +159,7 @@ int partition_new(int *niz, int n) {
 			l++;
 		}
 		else {
-			int tmp = niz[l];
+			tmp = niz[l];
 			niz[l] = niz[r];
 			niz[r] = tmp;
 		}
@@ -143,6 +176,16 @@ int partition_new(int *niz, int n) {
 }
 
 
+// quick sort new
+void quicksort_new(int *niz, int n) {
+	int pi;
+	if (n < 2)
+		return;
+	pi = partition_new(niz, n);
+	quicksort_new(niz, pi);
+	quicksort_new(niz + pi + 1, n - pi - 1);
+}
+
 // quick sort s odabirom sortiranja
 void quicksort_test(int *niz, int n) {
 	int pi;
@@ -156,16 +199,6 @@ void quicksort_test(int *niz, int n) {
 	}
 }
 
-
-// quick sort new
-void quicksort_new(int *niz, int n) {
-	int pi;
-	if (n < 2)
-		return;
-	pi = partition_new(niz, n);
-	quicksort_new(niz, pi);
-	quicksort_new(niz + pi + 1, n - pi - 1);
-}
 
 // merge sort
 void merge(int *niz, int *niza, int na, int *nizb, int nb) {
@@ -244,9 +277,10 @@ void main() {
 		printf("Insertion: %f\t", (1 + 5*n + pow(n,2))); // Slozenost Insertionsort-a
 		printf("Quicksort: %f\n", ((2*n-1) + 4 * (pow(2,(k + 1))-1) +  3 * n * k + n)); // Slozenost Quicksort-a
 	}
+	*/
 	
-	
-	for (c = 2; c < 10000; c = c * 2) {
+	/*
+	for (c = 2; c < 64; c = c * 2) {
 		niz1 = generate(30000);
 		niz2 = generate(30000);
 		printf("c: %d\t", c);
@@ -271,22 +305,22 @@ void main() {
 		free(niz);
 		*/
 
-		/*
+		
 		niz = generate(n);
 		insertionsort(niz, n);
 		
 		niz1 = duplicate(niz, n);
 		niz2 = duplicate(niz, n);
 		
-
+		/* QUICK SORT ZA SORTIRANI NIZ */
 		quick_sorted = measure(quicksort, niz1, n);
 		quick_sorted_pivot = measure(quicksort_new, niz2, n);
 		free(niz);
 
 		free(niz1);
 		free(niz2);
-		*/
 		
+		/* QUICK SORT ZA SLUCAJNI NIZ */
 		niz = generate(n);
 		quicktime = measure(quicksort, niz, n);
 		free(niz);

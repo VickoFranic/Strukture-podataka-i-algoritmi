@@ -56,6 +56,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <StackReserveSize>16000000</StackReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
+      <StackCommitSize>
+      </StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
