@@ -8,6 +8,8 @@ typedef struct Node {
 	struct Node *left, *right;
 } Node;
 
+int readWord(FILE *fd, char *buffer);
+
 // Stablo odnosno pokazivaè na korijen stabla
 typedef Node* BSTree;
 
