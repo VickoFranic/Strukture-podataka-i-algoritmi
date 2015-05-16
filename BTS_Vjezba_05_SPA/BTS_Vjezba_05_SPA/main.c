@@ -48,7 +48,7 @@ void main()
 	}
 
 	fclose(fd);
-
+	
 	// Ispiši stablo, visinu i broj èvorova
 //	PrintBSTree(bst);
 	printf("\nH = %d, N = %d\n", BSTHeight(bst), wc);
@@ -61,7 +61,7 @@ void main()
 	}
 	SaveBSTree(bst, fd);	
 	fclose(fd);
-
+	
 //	DeleteBSTree(bst);
 
 	// Uèitaj stablo
@@ -71,6 +71,8 @@ void main()
 		return;
 	}
 	bst = LoadBSTree(fd);	
+	PrintBSTree(bst);
+
 	fclose(fd);
 
 	// Ispiši visinu i izbriši

@@ -95,13 +95,13 @@ BSTree LoadBSTree(FILE *fd)
 {
 	// Uèitava rijeè po rijeè iz tekstualne datoteke i dodaje ih u stablo preko AddNode() funkcije.
 	// Rijeè duplicirati sa strdup().
-	char* tmp[128];
+	char tmp[128000];
 	BSTree novi = NewBSTree();
 	
 
-	while (readWord(fd, tmp)) {
+	while (fscanf(fd, "%128[^,]", tmp) > 0) {
 		AddNode(&novi, strdup(tmp));
-		printf("Novi: %s\n", tmp);
+		fgetc(fd);
 	}
 	return novi;
 }
