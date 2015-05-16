@@ -19,4 +19,9 @@ void main() {
 	insert(pq, &el6);
 
 	printPQ(pq);
+
+	removeMax(pq);
+	printf("\n");
+
+	printPQ(pq);
 }
