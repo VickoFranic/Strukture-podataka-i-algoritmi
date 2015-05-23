@@ -58,15 +58,15 @@ void main()
 	{
 		float st, et;
 		dict = NewTable(size);
-//		st = clock();
+		st = clock();
 		fillTable(dict);
 		
-		PrintTable(dict);
+//		PrintTable(dict);
 
-		/*
+		
 		et = clock();
 		printf("Size = %d, load factor = %f, time = %f\n", dict->size, (float)dict->load / dict->size, (et-st)/CLOCKS_PER_SEC);
 		DeleteTable(dict);
-		*/
+		
 	}
 }
