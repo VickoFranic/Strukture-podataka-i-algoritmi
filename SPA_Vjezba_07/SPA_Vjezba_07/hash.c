@@ -30,7 +30,7 @@ HashTable *NewTable(int size)
 	ht = (HashTable*)malloc(sizeof(HashTable));
 	ht->size = size;
 	ht->load = 0;
-	ht->table = malloc((sizeof(Bin)) * size);	// velicina jednog elementa * koliko ih ima u tablici
+	ht->table = (Bin**)malloc((sizeof(Bin*)) * size);	// velicina jednog elementa * koliko ih ima u tablici
 
 	for (i; i < ht->size; i++) {
 		ht->table[i] = NULL;
@@ -48,17 +48,12 @@ int Get(HashTable *ht, char *word)
 	kljuc = hash(word) % ht->size;
 	it = ht->table[kljuc];
 
-	if (it == NULL)
-		return 0;	// nema nista u pretincu
-	else if (it != NULL) {	// ima nesto
+
 		while (it != NULL) {
 			if (strcmp(word, it->word) == 0)	// rijec postoji u pretincu
 				return 1;
-
 			it = it->next;
 		}
-	}
-	else
 		return 0;
 }
 
@@ -68,19 +63,17 @@ void Insert(HashTable *ht, char *word)
 	// povecava load tablice
 	unsigned int kljuc;
 	Bin* novi; 
-	novi = malloc(sizeof(Bin));
+	novi = (Bin*)malloc(sizeof(Bin));
 
 	novi->word = word;
 	novi->next = NULL;
 
 	kljuc = hash(word) % ht->size;
+	
+	novi->next = ht->table[kljuc];
+	ht->table[kljuc] = novi;
 
-	if (ht->table[kljuc] == NULL)
-		ht->table[kljuc] = novi;
-	else {
-		novi->next = ht->table[kljuc];
-		ht->table[kljuc] = novi;
-	}
+	ht->load++;
 }
 
 void PrintTable(HashTable* ht) {
@@ -101,4 +94,21 @@ void PrintTable(HashTable* ht) {
 void DeleteTable(HashTable *ht)
 {
 	// brise cijelu hash tablicu: liste na svim pretincima (rijec i element liste), pretince i samu hash tablicu
+	int i = 0;
+	Bin* tmp1;
+	Bin* tmp2;
+
+	while(i < ht->size) {
+		tmp1 = ht->table[i];
+
+		while(tmp1 != NULL) {
+			tmp2 = tmp1;
+			tmp1 = tmp1->next;
+	
+			free(tmp2->word);
+			free(tmp2);
+		}
+		i++;
+	}
+	free(ht);
 }
