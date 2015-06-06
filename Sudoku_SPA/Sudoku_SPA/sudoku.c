@@ -13,7 +13,6 @@ Position* fromGrid(int grid[9][9]) {
 		for(j=0; j < 9; j++)
 			sudoku->board[i][j] = grid[i][j];
 	}
-	sudoku->positionCnt = 0;
 
 	return sudoku;
 }
@@ -67,7 +66,7 @@ int checkGrid(Position* p, int row, int col, int num) {
 }
 
 // ispunjava moves sa legalnim potezima u poziciji p
-// vraæa broj leganih poteza
+// vraÃ¦a broj leganih poteza
 int legalMoves(Position *p, Move moves[1000]) {
 	int r, c, broj, test;
 	int cnt = 0;
@@ -82,7 +81,6 @@ int legalMoves(Position *p, Move moves[1000]) {
 						moves[cnt].broj = test;
 						moves[cnt].r = r;
 						moves[cnt].c = c;
-						p->positionCnt++;
 						cnt++;
 					}
 				}
@@ -95,14 +93,12 @@ int legalMoves(Position *p, Move moves[1000]) {
 void makeMove(Position *p, Move m) {
 		p->board[m.r][m.c] = m.broj;
 
-		p->positionCnt++;
 }
 
 void undoMove(Position *p, Move m) {
 	p->board[m.r][m.c] = 0;
-
-	p->positionCnt--;
 }
+
 // provjeri da li je rjesen
 int checkSudoku(Position* p) {
 	int r, c;
@@ -128,6 +124,7 @@ int solveSudoku(Position *p) {
 		return 1;
 
 	n = legalMoves(p, moves);	// vrati broj legalnih poteza
+	sortMoves(moves, n);
 
 	for (i=0; i < n; i++) {
 		makeMove(p, moves[i]);
@@ -139,5 +136,21 @@ int solveSudoku(Position *p) {
 }
 
 void sortMoves(Move moves[1000], int n) {
+	int tmpC, tmpR, j;
 
+	int i = 0;
+
+	while(i < n) {
+		tmpC = moves[i].c;
+		tmpR = moves[i].r;
+		moves[i].counter = 0;
+
+		j = i + 1;
+
+		while ((tmpC == moves[j].c) && (tmpR == moves[j].r)) {
+			moves[i].counter++;
+			moves[j].counter++;
+		}
+		i++;
+	}
 }
