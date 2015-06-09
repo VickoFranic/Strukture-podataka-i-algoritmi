@@ -143,6 +143,7 @@ int cmpFunc(const void* mA, const void* mB) {
 }
 
 void sortMoves(Move moves[1000], int n) {
+<<<<<<< HEAD
 	int tmpC, tmpR, posCnt, i, j, k;
 	i = 0; k = 0;
 
@@ -166,3 +167,23 @@ void sortMoves(Move moves[1000], int n) {
 	}
 	qsort(moves, n, sizeof(Move), cmpFunc);
 }
+=======
+	int tmpC, tmpR, j;
+
+	int i = 0;
+
+	while(i < n) {
+		tmpC = moves[i].c;
+		tmpR = moves[i].r;
+		moves[i].counter = 0;
+
+		j = i + 1;
+
+		while ((tmpC == moves[j].c) && (tmpR == moves[j].r)) {
+			moves[i].counter++;
+			moves[j].counter++;
+		}
+		i++;
+	}
+}
+>>>>>>> e2aa2e5e80941f010801c1ed19d7c1836097c524
