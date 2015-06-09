@@ -1,4 +1,4 @@
-#include "sudoku.h"
+﻿#include "sudoku.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,20 +6,19 @@ static int posCnt = 0;
 
 // kreira novi sudoku od zadanih brojeva
 Position* fromGrid(int grid[9][9]) {
-	int i,j;
-	Position* sudoku =(Position*)malloc(sizeof(Position));
+	int i, j;
+	Position* sudoku = (Position*)malloc(sizeof(Position));
 
-	for(i=0; i < 9; i++) {
-		for(j=0; j < 9; j++)
+	for (i = 0; i < 9; i++) {
+		for (j = 0; j < 9; j++)
 			sudoku->board[i][j] = grid[i][j];
 	}
-	sudoku->positionCnt = 0;
 
 	return sudoku;
 }
 
 void printPosition(Position *p) {
-	int i,j;
+	int i, j;
 
 	for (i = 0; i < 9; i++) {
 		for (j = 0; j < 9; j++)
@@ -67,7 +66,7 @@ int checkGrid(Position* p, int row, int col, int num) {
 }
 
 // ispunjava moves sa legalnim potezima u poziciji p
-// vra�a broj leganih poteza
+// vraæa broj leganih poteza
 int legalMoves(Position *p, Move moves[1000]) {
 	int r, c, broj, test;
 	int cnt = 0;
@@ -82,27 +81,24 @@ int legalMoves(Position *p, Move moves[1000]) {
 						moves[cnt].broj = test;
 						moves[cnt].r = r;
 						moves[cnt].c = c;
-						p->positionCnt++;
 						cnt++;
 					}
-				}
 			}
 		}
+	}
 
 	return cnt;
 }
 
 void makeMove(Position *p, Move m) {
-		p->board[m.r][m.c] = m.broj;
+	p->board[m.r][m.c] = m.broj;
 
-		p->positionCnt++;
 }
 
 void undoMove(Position *p, Move m) {
 	p->board[m.r][m.c] = 0;
-
-	p->positionCnt--;
 }
+
 // provjeri da li je rjesen
 int checkSudoku(Position* p) {
 	int r, c;
@@ -128,8 +124,9 @@ int solveSudoku(Position *p) {
 		return 1;
 
 	n = legalMoves(p, moves);	// vrati broj legalnih poteza
+	sortMoves(moves, n);
 
-	for (i=0; i < n; i++) {
+	for (i = 0; i < n; i++) {
 		makeMove(p, moves[i]);
 		if (solveSudoku(p))
 			return 1;
@@ -138,6 +135,34 @@ int solveSudoku(Position *p) {
 	return 0;
 }
 
-void sortMoves(Move moves[1000], int n) {
+int cmpFunc(const void* mA, const void* mB) {
+	int l = ((Move*) mA)->counter;
+	int r = ((Move*)mB)->counter;
 
+	return (l - r);
+}
+
+void sortMoves(Move moves[1000], int n) {
+	int tmpC, tmpR, posCnt, i, j, k;
+	i = 0; k = 0;
+
+	while (i < n) {
+		tmpC = moves[i].c;
+		tmpR = moves[i].r;
+
+		j = i;
+		posCnt = 0; k = 0;
+
+		while ((tmpC == moves[i].c) && (tmpR == moves[i].r)) {
+			posCnt++;
+			i++;
+		}
+		
+		while (k < posCnt) {
+			moves[j].counter = posCnt;
+			j++;
+			k++;
+		}
+	}
+	qsort(moves, n, sizeof(Move), cmpFunc);
 }

@@ -5,7 +5,6 @@ typedef struct {
 	// struktura opisuje poziciju (npr. 9x9 matrica)
 	int board[9][9];
 	// struktura može imati dodatne èlanove da bi se olakšale neke provjere (npr. broj ispunjenih polja)
-	int positionCnt;
 } Position;
 
 typedef struct {
@@ -13,6 +12,7 @@ typedef struct {
 	int r;
 	int c;
 	int broj;
+	int counter;
 } Move;
 
 // kreira novi sudoku od zadanih brojeva
@@ -39,6 +39,9 @@ void undoMove(Position *p, Move m);
 
 // rekurzivna funkcija koja implementira DFS pretragu 
 int solveSudoku(Position *p);
+
+// compare funkcija za quick sort
+int cmpFunc(const void* a, const void* b);
 
 // sortiranje poteza (za dodatni dio zadatka)
 void sortMoves(Move moves[1000], int n);
